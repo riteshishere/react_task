@@ -89,7 +89,15 @@ const Register = ({ location, history }) => {
         generalValidator(phone, phonePattern, phoneErrorMsg, setPhoneErrorMsg, "Please enter a valid phone number")
     }
 
-    const canProceed = () => (emailErrorMsg.length === 0 && email.length > 0 && password.length > 0)
+    const canProceed = () => (
+        name.length > 0
+        && emailErrorMsg.length === 0
+        && email.length > 0
+        && passwordErrorMsg.length === 0
+        && password.length > 0
+        && phoneErrorMsg.length === 0
+        && phone.length > 0
+    )
 
     const registerHandler = (e) => {
         e.preventDefault()
