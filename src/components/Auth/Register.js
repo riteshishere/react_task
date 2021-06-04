@@ -14,6 +14,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import generalValidator from '../../utilities/validator'
 
 const useStyles = makeStyles((theme) => ({
     flexbox: {
@@ -41,18 +42,6 @@ const useStyles = makeStyles((theme) => ({
         width: "90%",
     },
 }));
-
-const generalValidator = (value, pattern, ErrorMsg, setErrorMsg, msg) => {
-    if (value.length > 0) {
-        if (!pattern.test(value) && ErrorMsg !== msg) {
-            setErrorMsg(msg)
-        } else if (pattern.test(value) && ErrorMsg.length !== 0) {
-            setErrorMsg("")
-        }
-    } else if (value === "" && ErrorMsg !== "") {
-        setErrorMsg("")
-    }
-}
 
 const Register = ({ location, history }) => {
     const classes = useStyles();
