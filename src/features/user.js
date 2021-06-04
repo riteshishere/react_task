@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from "axios"
+import API from '../utils/axios'
 
 const initialState = {
     user: null,
@@ -13,12 +13,14 @@ export const loginUser = createAsyncThunk('user/login', async ({ email, password
             'Content-Type': 'application/json',
         },
     }
-    const { data } = await axios.post(
-        `www.google.com/fakeAPI`,
+    const response = await API.post(
+        `/user/login`,
         { email, password },
         config
     )
-    return data
+    console.log("Response from server is");
+    console.log(response)
+    return response.data
 })
 
 const userSlice = createSlice({
@@ -31,11 +33,18 @@ const userSlice = createSlice({
     },
     extraReducers: {
         [loginUser.pending]: (state, action) => {
+            state.error = null
             state.user = null
             state.loading = true
         },
         [loginUser.fulfilled]: (state, action) => {
-            state.user = action.payload
+            if (!action.payload.success) {
+                state.error = action.payload.msg
+                if (state.user !== null) state.user = null
+            } else {
+                state.error = null
+                state.user = action.payload
+            }
             state.loading = false
         },
         [loginUser.rejected]: (state, action) => {
