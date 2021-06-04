@@ -1,14 +1,14 @@
-import './App.css';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { Header } from './components/Header'
+import React from 'react'
+import { Route } from 'react-router-dom'
+import Header from './components/Header'
 
 import { Auth } from './components/Auth'
 function App() {
   return (
-    <Router>
-      <Route render={({history})=> <Header history={history} />} />
+    <React.Fragment>
+      <Header />
       <Route path="/auth" component={Auth} />
-    </Router>
+    </React.Fragment>
   );
 }
 

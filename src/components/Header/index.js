@@ -9,7 +9,8 @@ import Button from "@material-ui/core/Button"
 import Link from "@material-ui/core/Link"
 import Typography from "@material-ui/core/Typography"
 
-import { logoutUser } from '../../features/user'
+import { logoutUser } from '../../reducers/userSlice'
+import { withRouter } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
     block: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Header = ({ history }) => {
+const Header = ({ history }) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.user)
     const classes = useStyles();
@@ -74,3 +75,5 @@ export const Header = ({ history }) => {
     )
 
 }
+
+export default withRouter(Header)
