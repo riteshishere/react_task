@@ -40,12 +40,12 @@ const Header = ({ location, history }) => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.user)
     const classes = useStyles();
-    const redirect = location.search ? location.search.split('=')[1] : '/'
     useEffect(() => {
         console.log("location is", location)
         console.log("history is", history)
         if (!user) {
             if(location.pathname === "/auth/register") history.push("/auth/register")
+            if(location.pathname === "/auth/change-password") history.push("/auth/change-password")
             else history.push("/auth/login")
         }
     }, [user, history])
