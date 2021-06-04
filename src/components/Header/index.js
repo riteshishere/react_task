@@ -1,0 +1,76 @@
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { makeStyles } from "@material-ui/core/styles"
+import AppBar from "@material-ui/core/AppBar"
+import Container from "@material-ui/core/Container"
+import Toolbar from "@material-ui/core/Toolbar"
+import Button from "@material-ui/core/Button"
+import Link from "@material-ui/core/Link"
+import Typography from "@material-ui/core/Typography"
+
+import { logoutUser } from '../../features/user'
+
+const useStyles = makeStyles((theme) => ({
+    block: {
+        display: "block",
+    },
+    flex: {
+        display: "flex",
+    },
+    spaceBetween: {
+        justifyContent: "space-between",
+    },
+    padding: {
+        padding: "24px",
+    },
+    max: {
+        maxWidth: "1280px",
+    },
+    title: {
+        fontWeight: 900,
+    },
+    bold: {
+        fontWeight: 800,
+    },
+}));
+
+export const Header = ({ history }) => {
+    const dispatch = useDispatch()
+    const user = useSelector(state => state.user.user)
+    const classes = useStyles();
+    useEffect(() => {
+        if (!user) {
+            history.push("/auth/login")
+        }
+    }, [user, history])
+
+    const logoutHandler = () => {
+        dispatch(logoutUser())
+    }
+
+    return (
+        <AppBar position="static" className={classes.block}>
+            <Toolbar className={classes.padding}>
+                <Container
+                    disableGutters={true}
+                    className={`${classes.max} ${classes.flex} ${classes.spaceBetween}`}
+                >
+                    <Link
+                        href="/"
+                        color="secondary"
+                        underline="none"
+                    >
+                        <Typography color="inherit" variant="h3" className={classes.title}>
+                            React Task
+                        </Typography>
+                    </Link>
+                    {user &&
+                        <Button color="secondary" variant="contained" onClick={logoutHandler} className={classes.bold}>Logout</Button>
+                    }
+                </Container>
+            </Toolbar>
+        </AppBar>
+    )
+
+}
