@@ -45,7 +45,7 @@ const Header = ({ location, history }) => {
         console.log("history is", history)
         if (!user) {
             if(location.pathname === "/auth/register") history.push("/auth/register")
-            if(location.pathname === "/auth/change-password") history.push("/auth/change-password")
+            else if(location.pathname === "/auth/change-password") history.push("/auth/change-password")
             else history.push("/auth/login")
         }
     }, [user, history])
