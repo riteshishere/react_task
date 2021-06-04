@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { loginUser } from '../../features/user'
+import { loginUser } from '../../reducers/userSlice'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
-import { useTextField } from '../Utils/TextField'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import Alert from '../Utils/Alert'
+import Alert from '../commonComponents/Alert'
 import Backdrop from '@material-ui/core/Backdrop'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
@@ -47,22 +46,12 @@ const Login = ({ location, history }) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [emailErrorMsg, setEmailErrorMsg] = useState("")
-    const [emailid, emailInput] = useTextField({
-        variant: "outlined",
-        required: true,
-        fullWidth: true,
-        id: "emailid",
-        name: "emailid",
-        label: "Email address",
-        type: "email",
-        autoComplete: "email",
-        autoFocus: true,
-        errorMsg: emailErrorMsg
-    })
 
     const emailPattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i)
+
     const dispatch = useDispatch()
     const { user, loading, error } = useSelector(state => state.user)
+
     const redirect = location.search ? location.search.split('=')[1] : '/'
 
     useEffect(() => {
@@ -85,7 +74,6 @@ const Login = ({ location, history }) => {
     const canProceed = () => (emailErrorMsg.length === 0 && email.length > 0 && password.length > 0)
     const loginHandler = (e) => {
         e.preventDefault()
-        console.log(`Dispatching with email ${email} & password ${password}`)
         dispatch(loginUser({ email, password }))
     }
     useEffect(() => {
@@ -129,8 +117,6 @@ const Login = ({ location, history }) => {
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
                     />
-                    {/* {emailInput} */}
-
                     <TextField
                         variant="outlined"
                         margin="normal"
