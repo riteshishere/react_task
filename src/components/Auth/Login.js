@@ -13,6 +13,8 @@ import Container from '@material-ui/core/Container'
 import Alert from '../commonComponents/Alert'
 import Backdrop from '@material-ui/core/Backdrop'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
     flexbox: {
@@ -142,6 +144,13 @@ const Login = ({ location, history }) => {
                     >
                         Sign In
                     </Button>
+                    <Grid container>
+                        <Grid item>
+                            <Link href="/auth/register" variant="body2">
+                                {"Don't have an account? Register"}
+                            </Link>
+                        </Grid>
+                    </Grid>
                 </form>
             </div>
         </Container>
