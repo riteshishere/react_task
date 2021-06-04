@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import API from '../utils/axios'
+import API from '../service/axios'
 
 const initialState = {
     user: null,
@@ -8,15 +8,9 @@ const initialState = {
 }
 
 export const loginUser = createAsyncThunk('user/login', async ({ email, password }) => {
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    }
     const response = await API.post(
         `/user/login`,
         { email, password },
-        config
     )
     console.log("Response from server is");
     console.log(response)
