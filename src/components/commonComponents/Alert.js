@@ -8,7 +8,7 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-function DescriptionAlerts(props) {
+const DescriptionAlerts = (props) => {
     const classes = useStyles()
 
     return (
