@@ -8,7 +8,7 @@ const useStyles = makeStyles(() => ({
     },
 }))
 
-export default function DescriptionAlerts(props) {
+const DescriptionAlerts = (props) => {
     const classes = useStyles()
 
     return (
@@ -18,3 +18,5 @@ export default function DescriptionAlerts(props) {
         </Alert>
     );
 }
+
+export default DescriptionAlerts
