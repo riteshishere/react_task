@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import Alert from '../commonComponents/Alert'
 import Backdrop from '@material-ui/core/Backdrop'
@@ -15,36 +14,11 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import generalValidator from '../../utilities/validator'
-
-const useStyles = makeStyles((theme) => ({
-    flexbox: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%',
-        marginTop: theme.spacing(1),
-    },
-    backdrop: {
-        zIndex: theme.zIndex.drawer + 1,
-        color: '#fff',
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-    fullWidth: {
-        width: "90%",
-    },
-}));
+import AuthComponentStyle from '../../styles/AuthComponentStyle'
+import { emailPattern, passwordPattern, phonePattern } from '../../utilities/regex'
 
 const Register = ({ location, history }) => {
-    const classes = useStyles();
+    const classes = AuthComponentStyle();
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -53,10 +27,6 @@ const Register = ({ location, history }) => {
     const [emailErrorMsg, setEmailErrorMsg] = useState("")
     const [passwordErrorMsg, setPasswordErrorMsg] = useState("")
     const [phoneErrorMsg, setPhoneErrorMsg] = useState("")
-
-    const emailPattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i)
-    const passwordPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})")
-    const phonePattern = new RegExp(/^\d{10}$/)
 
     const dispatch = useDispatch()
     const { user, loading, error } = useSelector(state => state.user)
