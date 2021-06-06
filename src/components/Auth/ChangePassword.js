@@ -6,43 +6,17 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import Alert from '../commonComponents/Alert'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Backdrop from '@material-ui/core/Backdrop'
 import generalValidator from '../../utilities/validator'
 import API from '../../service/axios'
+import AuthComponentStyle from '../../styles/AuthComponentStyle'
+import { passwordPattern } from '../../utilities/regex'
 
-const useStyles = makeStyles((theme) => ({
-    flexbox: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%',
-        marginTop: theme.spacing(1),
-    },
-    backdrop: {
-        zIndex: theme.zIndex.drawer + 1,
-        color: '#fff',
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-    fullWidth: {
-        width: "90%",
-    },
-}));
-
-const ChangePassword = ({ location, history }) => {
-    const classes = useStyles();
+const ChangePassword = ({ history }) => {
+    const classes = AuthComponentStyle();
     const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
@@ -51,7 +25,6 @@ const ChangePassword = ({ location, history }) => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
-    const newPasswordPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})")
     const user = useSelector(state => state.user.user)
 
     useEffect(() => {
@@ -63,7 +36,7 @@ const ChangePassword = ({ location, history }) => {
     const validate = () => {
         generalValidator(
             newPassword,
-            newPasswordPattern,
+            passwordPattern,
             newPasswordErrorMsg,
             setNewPasswordErrorMsg,
             "Please enter a strong password"
