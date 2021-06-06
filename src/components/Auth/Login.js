@@ -13,15 +13,15 @@ import Backdrop from '@material-ui/core/Backdrop'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
+import generalValidator from '../../utilities/validator'
 import AuthComponentStyle from '../../styles/AuthComponentStyle'
+import { emailPattern } from '../../utilities/regex'
 
 const Login = ({ location, history }) => {
     const classes = AuthComponentStyle();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [emailErrorMsg, setEmailErrorMsg] = useState("")
-
-    const emailPattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i)
 
     const dispatch = useDispatch()
     const { user, loading, error } = useSelector(state => state.user)
@@ -34,25 +34,26 @@ const Login = ({ location, history }) => {
         }
     }, [history, user, redirect])
 
-    const validate = () => {
-        if (email.length > 0) {
-            if (!emailPattern.test(email) && emailErrorMsg !== "Please enter a valid Email") {
-                setEmailErrorMsg("Please enter a valid Email")
-            } else if (emailPattern.test(email) && emailErrorMsg.length !== 0) {
-                setEmailErrorMsg("")
-            }
-        } else if (email === "") {
-            setEmailErrorMsg("")
-        }
-    }
-    const canProceed = () => (emailErrorMsg.length === 0 && email.length > 0 && password.length > 0)
+    const canProceed = () => (
+        emailErrorMsg.length === 0
+        && email.length > 0
+        && password.length > 0
+    )
+
     const loginHandler = (e) => {
         e.preventDefault()
         dispatch(loginUser({ email, password }))
     }
+
     useEffect(() => {
-        validate()
-    }, [email, password])
+        generalValidator(
+            email,
+            emailPattern,
+            emailErrorMsg,
+            setEmailErrorMsg,
+            "Please enter a valid Email"
+        )
+    }, [email])
 
     return (
         <Container component="main" maxWidth="sm">

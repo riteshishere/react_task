@@ -15,6 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import generalValidator from '../../utilities/validator'
 import AuthComponentStyle from '../../styles/AuthComponentStyle'
+import { emailPattern, passwordPattern, phonePattern } from '../../utilities/regex'
 
 const Register = ({ location, history }) => {
     const classes = AuthComponentStyle();
@@ -26,10 +27,6 @@ const Register = ({ location, history }) => {
     const [emailErrorMsg, setEmailErrorMsg] = useState("")
     const [passwordErrorMsg, setPasswordErrorMsg] = useState("")
     const [phoneErrorMsg, setPhoneErrorMsg] = useState("")
-
-    const emailPattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i)
-    const passwordPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})")
-    const phonePattern = new RegExp(/^\d{10}$/)
 
     const dispatch = useDispatch()
     const { user, loading, error } = useSelector(state => state.user)

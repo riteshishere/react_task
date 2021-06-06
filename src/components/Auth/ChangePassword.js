@@ -13,6 +13,7 @@ import Backdrop from '@material-ui/core/Backdrop'
 import generalValidator from '../../utilities/validator'
 import API from '../../service/axios'
 import AuthComponentStyle from '../../styles/AuthComponentStyle'
+import { passwordPattern } from '../../utilities/regex'
 
 const ChangePassword = ({ history }) => {
     const classes = AuthComponentStyle();
@@ -24,7 +25,6 @@ const ChangePassword = ({ history }) => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
-    const newPasswordPattern = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})")
     const user = useSelector(state => state.user.user)
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const ChangePassword = ({ history }) => {
     const validate = () => {
         generalValidator(
             newPassword,
-            newPasswordPattern,
+            passwordPattern,
             newPasswordErrorMsg,
             setNewPasswordErrorMsg,
             "Please enter a strong password"
