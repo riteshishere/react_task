@@ -30,6 +30,7 @@ const Login = ({ location, history }) => {
 
     useEffect(() => {
         if (user) {
+            console.log("Inside login component user is existing")
             history.push(redirect)
         }
     }, [history, user, redirect])

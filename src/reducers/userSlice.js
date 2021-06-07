@@ -33,6 +33,7 @@ const userSlice = createSlice({
     reducers: {
         logoutUser(state, action) {
             state = initialState
+            console.log("now state after logoutUser action is", state)
         }
     },
     extraReducers: {
@@ -47,7 +48,10 @@ const userSlice = createSlice({
                 if (state.user !== null) state.user = null
             } else {
                 state.error = null
-                state.user = action.payload
+                state.user = {
+                    user: action.payload.user,
+                    token: action.payload.token,
+                }
             }
             state.loading = false
         },
@@ -75,12 +79,12 @@ const userSlice = createSlice({
         },
         [registerUser.rejected]: (state, action) => {
             const error = action.payload
-            state.error = 
+            state.error =
                 error.response
                     ? error.response.data.message
                         ? error.response.data.message
                         : error.message
-                    :error.request
+                    : error.request
                         ? error.request.data.message
                             ? error.request.message
                             : error.message
