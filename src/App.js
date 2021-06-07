@@ -9,7 +9,7 @@ function App() {
     <React.Fragment>
       <Header />
       <Route path="/auth" component={Auth} />
-      <Route path="/" component={Dashboard} />
+      <Route path="/" component={Dashboard} exact />
     </React.Fragment>
   );
 }
