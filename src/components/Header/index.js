@@ -15,6 +15,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import DashboardIcon from '@material-ui/icons/Dashboard'
 
 import { logoutUser } from '../../reducers/userSlice'
 import { withRouter } from 'react-router'
@@ -87,7 +88,7 @@ const Header = ({ location, history }) => {
         console.log("history is", history)
         if (!user) {
             if (location.pathname === "/auth/register") history.push("/auth/register")
-            history.push("/auth/login")
+            else history.push("/auth/login")
         }
     }, [user, history])
 
@@ -105,6 +106,10 @@ const Header = ({ location, history }) => {
 
     const handleChangePass = () => {
         history.push("/auth/change-password")
+    }
+
+    const dashboardHandler = () => {
+        history.push("/")
     }
 
     return (
@@ -150,6 +155,12 @@ const Header = ({ location, history }) => {
                                 open={open}
                                 onClose={handleClose}
                             >
+                                <StyledMenuItem onClick={dashboardHandler}>
+                                    <ListItemIcon>
+                                        <DashboardIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Dashboard" />
+                                </StyledMenuItem>
                                 <StyledMenuItem onClick={handleChangePass}>
                                     <ListItemIcon>
                                         <VpnKeyIcon fontSize="small" />
