@@ -1,13 +1,21 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { makeStyles } from "@material-ui/core/styles"
+import { makeStyles, withStyles } from "@material-ui/core/styles"
 import AppBar from "@material-ui/core/AppBar"
 import Container from "@material-ui/core/Container"
 import Box from '@material-ui/core/Box'
-import Button from "@material-ui/core/Button"
 import Link from "@material-ui/core/Link"
 import Typography from "@material-ui/core/Typography"
+import IconButton from '@material-ui/core/IconButton'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@material-ui/core/Menu'
+import ListItemIcon from "@material-ui/core/ListItemIcon"
+import ListItemText from "@material-ui/core/ListItemText"
+import VpnKeyIcon from '@material-ui/icons/VpnKey'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import DashboardIcon from '@material-ui/icons/Dashboard'
 
 import { logoutUser } from '../../reducers/userSlice'
 import { withRouter } from 'react-router'
@@ -54,25 +62,46 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('lg')]: {
             fontSize: "3rem",
         },
-    }
+    },
 }));
 
-const Header = ({ location, history }) => {
+const StyledMenuItem = withStyles((theme) => ({
+    root: {
+        "&:focus": {
+            backgroundColor: theme.palette.primary.main,
+            "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+                color: theme.palette.common.white
+            }
+        }
+    }
+}))(MenuItem);
+
+const Header = ({ history }) => {
+    const [anchorEl, setAnchorEl] = React.useState(null)
+    const open = Boolean(anchorEl)
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.user)
     const classes = useStyles();
-    useEffect(() => {
-        console.log("location is", location)
-        console.log("history is", history)
-        if (!user) {
-            if (location.pathname === "/auth/register") history.push("/auth/register")
-            else if (location.pathname === "/auth/change-password") history.push("/auth/change-password")
-            else history.push("/auth/login")
-        }
-    }, [user, history])
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget)
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null)
+    };
 
     const logoutHandler = () => {
-        dispatch(logoutUser())
+        handleClose()
+        dispatch(logoutUser({history}))
+    }
+
+    const handleChangePass = () => {
+        history.push("/auth/change-password")
+    }
+
+    const dashboardHandler = () => {
+        history.push("/")
     }
 
     return (
@@ -91,9 +120,54 @@ const Header = ({ location, history }) => {
                             React Task
                         </Typography>
                     </Link>
-                    {user &&
-                        <Button color="secondary" variant="contained" onClick={logoutHandler} className={classes.bold}>Logout</Button>
-                    }
+                    {user && (
+                        <div>
+                            <IconButton
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleMenu}
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                getContentAnchorEl={null}
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={open}
+                                onClose={handleClose}
+                            >
+                                <StyledMenuItem onClick={dashboardHandler}>
+                                    <ListItemIcon>
+                                        <DashboardIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Dashboard" />
+                                </StyledMenuItem>
+                                <StyledMenuItem onClick={handleChangePass}>
+                                    <ListItemIcon>
+                                        <VpnKeyIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Change Password" />
+                                </StyledMenuItem>
+                                <StyledMenuItem onClick={logoutHandler}>
+                                    <ListItemIcon>
+                                        <ExitToAppIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Logout" />
+                                </StyledMenuItem>
+                            </Menu>
+                        </div>
+                    )}
                 </Container>
             </Box>
         </AppBar>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { registerUser } from '../../reducers/userSlice'
 import Avatar from '@material-ui/core/Avatar'
@@ -10,14 +10,14 @@ import Container from '@material-ui/core/Container'
 import Alert from '../commonComponents/Alert'
 import Backdrop from '@material-ui/core/Backdrop'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import generalValidator from '../../utilities/validator'
 import AuthComponentStyle from '../../styles/AuthComponentStyle'
 import { emailPattern, passwordPattern, phonePattern } from '../../utilities/regex'
 
-const Register = ({ location, history }) => {
+const Register = ({ history }) => {
     const classes = AuthComponentStyle();
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -29,23 +29,25 @@ const Register = ({ location, history }) => {
     const [phoneErrorMsg, setPhoneErrorMsg] = useState("")
 
     const dispatch = useDispatch()
-    const { user, loading, error } = useSelector(state => state.user)
+    const { loading, error } = useSelector(state => state.user)
 
-    const redirect = location.search ? location.search.split('=')[1] : '/'
-
-    useEffect(() => {
-        if (user) {
-            history.push(redirect)
-        }
-    }, [history, user, redirect])
-
-    const validate = () => {
-        if (name.length > 0 && nameError) {
+    const nameHandler = (event) => {
+        setName(event.target.value)
+        if (event.target.value.length > 0 && nameError) {
             setNameError(false)
         }
-        generalValidator(email, emailPattern, emailErrorMsg, setEmailErrorMsg, "Please enter a valid Email")
-        generalValidator(password, passwordPattern, passwordErrorMsg, setPasswordErrorMsg, "Please enter a strong password")
-        generalValidator(phone, phonePattern, phoneErrorMsg, setPhoneErrorMsg, "Please enter a valid phone number")
+    }
+    const emailHandler = (event) => {
+        setEmail(event.target.value)
+        generalValidator(event.target.value, emailPattern, emailErrorMsg, setEmailErrorMsg, "Please enter a valid Email")
+    }
+    const passwordHandler = (event) => {
+        setPassword(event.target.value)
+        generalValidator(event.target.value, passwordPattern, passwordErrorMsg, setPasswordErrorMsg, "Please enter a strong password")
+    }
+    const phoneHandler = (event) => {
+        setPhone(event.target.value)
+        generalValidator(event.target.value, phonePattern, phoneErrorMsg, setPhoneErrorMsg, "Please enter a valid phone number")
     }
 
     const canProceed = () => (
@@ -61,12 +63,8 @@ const Register = ({ location, history }) => {
     const registerHandler = (e) => {
         e.preventDefault()
         if (name.length <= 0) setNameError(true)
-        else dispatch(registerUser({ name, email, password, phone }))
+        else dispatch(registerUser({ name, email, password, phone, history }))
     }
-
-    useEffect(() => {
-        validate()
-    }, [email, password, phone, name])
 
     return (
         <Container component="main" maxWidth="sm">
@@ -88,7 +86,7 @@ const Register = ({ location, history }) => {
                         <CircularProgress color="secondary" />
                     </Backdrop>
                 }
-                <form className={classes.form}>
+                <form className={classes.form} onSubmit={registerHandler} >
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -103,7 +101,7 @@ const Register = ({ location, history }) => {
                         helperText={nameError ? "Please provide your full name" : ""}
                         autoFocus
                         value={name}
-                        onChange={(event) => setName(event.target.value)}
+                        onChange={(event) => nameHandler(event)}
                     />
                     <TextField
                         variant="outlined"
@@ -118,7 +116,7 @@ const Register = ({ location, history }) => {
                         error={emailErrorMsg.length ? true : false}
                         helperText={emailErrorMsg}
                         value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        onChange={(event) => emailHandler(event)}
                     />
                     <TextField
                         variant="outlined"
@@ -133,7 +131,7 @@ const Register = ({ location, history }) => {
                         error={passwordErrorMsg.length ? true : false}
                         helperText={passwordErrorMsg}
                         value={password}
-                        onChange={(event) => setPassword(event.target.value)}
+                        onChange={(event) => passwordHandler(event)}
                     />
                     <TextField
                         variant="outlined"
@@ -148,7 +146,7 @@ const Register = ({ location, history }) => {
                         error={phoneErrorMsg.length ? true : false}
                         helperText={phoneErrorMsg}
                         value={phone}
-                        onChange={(event) => setPhone(event.target.value)}
+                        onChange={(event) => phoneHandler(event)}
                     />
                     <Button
                         type="submit"
@@ -158,13 +156,12 @@ const Register = ({ location, history }) => {
                         className={classes.submit}
                         size='large'
                         disabled={!canProceed()}
-                        onClick={e => registerHandler(e)}
                     >
                         Register
                     </Button>
                     <Grid container>
                         <Grid item>
-                            <Link href="/auth/login" variant="body2">
+                            <Link to="/auth/login">
                                 {"Already have an account? Login"}
                             </Link>
                         </Grid>

@@ -1,5 +1,7 @@
 import React from 'react'
-import { Route, Switch, useRouteMatch } from 'react-router-dom'
+import { Switch, useRouteMatch } from 'react-router-dom'
+import PublicRoute from '../../routes/PublicRoute'
+import PrivateRoute from '../../routes/PrivateRoute'
 import Login from './Login'
 import Register from './Register'
 import ChangePassword from './ChangePassword'
@@ -9,9 +11,9 @@ export const Auth = () => {
 
     return (
         <Switch>
-            <Route path={`${path}/login`} component={Login} />
-            <Route path={`${path}/register`} component={Register} />
-            <Route path={`${path}/change-password`} component={ChangePassword} />
+            <PublicRoute restricted path={`${path}/login`} component={Login} />
+            <PublicRoute restricted path={`${path}/register`} component={Register} />
+            <PrivateRoute path={`${path}/change-password`} component={ChangePassword} />
         </Switch>
     )
 }
