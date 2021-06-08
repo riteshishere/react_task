@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -15,7 +14,7 @@ import API from '../../service/axios'
 import AuthComponentStyle from '../../styles/AuthComponentStyle'
 import { passwordPattern } from '../../utilities/regex'
 
-const ChangePassword = ({ history }) => {
+const ChangePassword = () => {
     const classes = AuthComponentStyle();
     const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
@@ -24,14 +23,7 @@ const ChangePassword = ({ history }) => {
     const [confirmPasswordErrorMsg, setconfirmPasswordErrorMsg] = useState("")
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
-
-    const user = useSelector(state => state.user.user)
-
-    useEffect(() => {
-        if (!user) {
-            history.push("/auth/login")
-        }
-    }, [history, user])
+    const [msg, setMsg] = useState(null)
 
     const validate = () => {
         generalValidator(
@@ -41,7 +33,11 @@ const ChangePassword = ({ history }) => {
             setNewPasswordErrorMsg,
             "Please enter a strong password"
         )
-        if (confirmPassword.length > 0 && confirmPassword !== newPassword)
+        if (
+            confirmPassword.length > 0
+            && confirmPassword !== newPassword
+            && confirmPasswordErrorMsg !== "Password doesn't match with new password"
+        )
             setconfirmPasswordErrorMsg("Password doesn't match with new password")
         else if (
             (confirmPassword === "" && confirmPasswordErrorMsg !== "")
@@ -59,29 +55,23 @@ const ChangePassword = ({ history }) => {
     const changePasswordHandler = (e) => {
         e.preventDefault()
         if (error !== null) setError(null)
+        if (msg !== null) setMsg(null)
         if (loading === false) setLoading(true)
         console.log(`Resetting with password ${newPassword} & confirmPassword ${confirmPassword}`)
-        const token = user
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
         API.post(
             `/user/changePassword`,
             {
                 oldPassword,
                 newPassword,
             },
-            config
         ).then(res => {
-            console.log("Entered in try block")
+            console.log("Entered in then block")
             if (res.data.success) {
-                history.push("/")
+                setMsg("Password changed successfully!")
             } else {
                 setError(res.data.msg)
-                setLoading(false)
             }
+            setLoading(false)
         }).catch(error => {
             console.log("Entering in catch block")
             const err =
@@ -117,12 +107,17 @@ const ChangePassword = ({ history }) => {
                         {error}
                     </Alert>
                 }
+                {msg &&
+                    <Alert className={classes.fullWidth} severity="success" AlertTitle="Great!">
+                        {msg}
+                    </Alert>
+                }
                 {loading &&
                     <Backdrop className={classes.backdrop} open={true}>
                         <CircularProgress color="secondary" />
                     </Backdrop>
                 }
-                <form className={classes.form}>
+                <form className={classes.form} onSubmit={changePasswordHandler}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -175,7 +170,6 @@ const ChangePassword = ({ history }) => {
                         className={classes.submit}
                         size='large'
                         disabled={!canProceed()}
-                        onClick={e => changePasswordHandler(e)}
                     >
                         Sign In
                     </Button>

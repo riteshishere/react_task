@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { loginUser } from '../../reducers/userSlice'
 import Avatar from '@material-ui/core/Avatar'
@@ -11,29 +11,21 @@ import Container from '@material-ui/core/Container'
 import Alert from '../commonComponents/Alert'
 import Backdrop from '@material-ui/core/Backdrop'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
 import generalValidator from '../../utilities/validator'
 import AuthComponentStyle from '../../styles/AuthComponentStyle'
 import { emailPattern } from '../../utilities/regex'
 
-const Login = ({ location, history }) => {
+const Login = ({ history }) => {
     const classes = AuthComponentStyle();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [emailErrorMsg, setEmailErrorMsg] = useState("")
 
     const dispatch = useDispatch()
-    const { user, loading, error } = useSelector(state => state.user)
-
-    const redirect = location.search ? location.search.split('=')[1] : '/'
-
-    useEffect(() => {
-        if (user) {
-            console.log("Inside login component user is existing")
-            history.push(redirect)
-        }
-    }, [history, user, redirect])
+    const loading = useSelector(state => state.user.loading)
+    const error = useSelector(state => state.user.error)
 
     const canProceed = () => (
         emailErrorMsg.length === 0
@@ -41,20 +33,15 @@ const Login = ({ location, history }) => {
         && password.length > 0
     )
 
-    const loginHandler = (e) => {
-        e.preventDefault()
-        dispatch(loginUser({ email, password }))
+    const emailHandler = (event) => {
+        setEmail(event.target.value)
+        generalValidator(event.target.value, emailPattern, emailErrorMsg, setEmailErrorMsg, "Please enter a valid Email")
     }
 
-    useEffect(() => {
-        generalValidator(
-            email,
-            emailPattern,
-            emailErrorMsg,
-            setEmailErrorMsg,
-            "Please enter a valid Email"
-        )
-    }, [email])
+    const loginHandler = (e) => {
+        e.preventDefault()
+        dispatch(loginUser({ email, password, history }))
+    }
 
     return (
         <Container component="main" maxWidth="sm">
@@ -76,7 +63,7 @@ const Login = ({ location, history }) => {
                         <CircularProgress color="secondary" />
                     </Backdrop>
                 }
-                <form className={classes.form}>
+                <form className={classes.form} onSubmit={loginHandler}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -91,7 +78,7 @@ const Login = ({ location, history }) => {
                         helperText={emailErrorMsg}
                         autoFocus
                         value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        onChange={(event) => emailHandler(event)}
                     />
                     <TextField
                         variant="outlined"
@@ -114,13 +101,12 @@ const Login = ({ location, history }) => {
                         className={classes.submit}
                         size='large'
                         disabled={!canProceed()}
-                        onClick={e => loginHandler(e)}
                     >
                         Sign In
                     </Button>
                     <Grid container>
                         <Grid item>
-                            <Link href="/auth/register" variant="body2">
+                            <Link to="/auth/register">
                                 {"Don't have an account? Register"}
                             </Link>
                         </Grid>

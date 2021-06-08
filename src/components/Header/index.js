@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { makeStyles, withStyles } from "@material-ui/core/styles"
@@ -76,21 +76,12 @@ const StyledMenuItem = withStyles((theme) => ({
     }
 }))(MenuItem);
 
-const Header = ({ location, history }) => {
+const Header = ({ history }) => {
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.user)
     const classes = useStyles();
-    useEffect(() => {
-        console.log("User state is", user)
-        console.log("location is", location)
-        console.log("history is", history)
-        if (!user) {
-            if (location.pathname === "/auth/register") history.push("/auth/register")
-            else history.push("/auth/login")
-        }
-    }, [user, history])
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget)
@@ -101,7 +92,8 @@ const Header = ({ location, history }) => {
     };
 
     const logoutHandler = () => {
-        dispatch(logoutUser())
+        handleClose()
+        dispatch(logoutUser({history}))
     }
 
     const handleChangePass = () => {
