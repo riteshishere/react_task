@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
+import PrivateRoute from './routes/PrivateRoute'
 import Header from './components/Header'
 
 import { Auth } from './components/Auth'
@@ -9,7 +10,7 @@ function App() {
     <React.Fragment>
       <Header />
       <Route path="/auth" component={Auth} />
-      <Route path="/" component={Dashboard} exact />
+      <PrivateRoute path="/" component={Dashboard} exact />
     </React.Fragment>
   );
 }
