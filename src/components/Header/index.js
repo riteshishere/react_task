@@ -16,6 +16,8 @@ import ListItemText from "@material-ui/core/ListItemText"
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import DashboardIcon from '@material-ui/icons/Dashboard'
+import Badge from '@material-ui/core/Badge'
+import FavoriteIcon from '@material-ui/icons/Favorite'
 
 import { logoutUser } from '../../reducers/userSlice'
 import { withRouter } from 'react-router'
@@ -63,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
             fontSize: "3rem",
         },
     },
+    badge: {
+        color: theme.palette.secondary.light,
+    }
 }));
 
 const StyledMenuItem = withStyles((theme) => ({
@@ -93,7 +98,7 @@ const Header = ({ history }) => {
 
     const logoutHandler = () => {
         handleClose()
-        dispatch(logoutUser({history}))
+        dispatch(logoutUser({ history }))
     }
 
     const handleChangePass = () => {
@@ -122,6 +127,21 @@ const Header = ({ history }) => {
                     </Link>
                     {user && (
                         <div>
+                            <IconButton
+                                aria-label="User wishlist"
+                            >
+                                <Badge
+                                    className={classes.badge}
+                                    max={9}
+                                    badgeContent={
+                                        user.wishlist
+                                            ? user.wishlist.length.toString()
+                                            : '0'
+                                    }
+                                >
+                                    <FavoriteIcon color="secondary" />
+                                </Badge>
+                            </IconButton>
                             <IconButton
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"
