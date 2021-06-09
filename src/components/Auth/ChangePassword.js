@@ -95,7 +95,7 @@ const ChangePassword = () => {
     return (
         <Container component="main" maxWidth="sm">
             <CssBaseline />
-            <div className={classes.flexbox}>
+            <div className={`${classes.flexbox} ${classes.marginTop}`}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
