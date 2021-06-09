@@ -69,7 +69,7 @@ const Register = ({ history }) => {
     return (
         <Container component="main" maxWidth="sm">
             <CssBaseline />
-            <div className={classes.flexbox}>
+            <div className={`${classes.flexbox} ${classes.marginTop}`}>
                 <Avatar className={classes.avatar}>
                     <AccountCircleIcon />
                 </Avatar>

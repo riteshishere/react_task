@@ -10,12 +10,17 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 
 import DashboardTitle from './Title'
 import PrimaryInfo from './PrimaryInfo'
+import EMailInfo from './EmailInfo'
 
 import Container from "@material-ui/core/Container"
+import Grid from '@material-ui/core/Grid'
 
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
+    fullWidth: {
+        width: "100%",
+    },
     flex: {
         display: "flex",
         alignItems: "center",
@@ -68,12 +73,17 @@ const useStyles = makeStyles((theme) => ({
         padding: "10px",
     },
     containerPaddingBreak: {
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('sm')]: {
             padding: "0 3rem",
         },
-        [theme.breakpoints.up('md')]: {
+        [theme.breakpoints.up('sm')]: {
             padding: "0 5rem",
         },
+    },
+    gridContainer: {
+        boxShadow: "0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%)",
+        padding: "15px",
+        justifyContent: "space-around"
     },
 }));
 
@@ -95,9 +105,9 @@ const Dashboard = () => {
     }
 
     return (
-        <Container component="main" maxWidth="lg" disableGutters={true} className={localStyle.containerPaddingBreak}>
+        <Container component="main" maxWidth="md" disableGutters={true} className={localStyle.containerPaddingBreak}>
             <CssBaseline />
-            <div className={`${classes.flexbox} ${localStyle.curveBorder}`}>
+            <div className={`${classes.flexbox} ${localStyle.curveBorder} ${classes.marginTop}`}>
                 <DashboardTitle />
                 {error &&
                     <Alert className={classes.fullWidth} severity="error" AlertTitle="Problem in authentication">
@@ -110,14 +120,12 @@ const Dashboard = () => {
                     </Backdrop>
                 }
                 {user &&
-                    <PrimaryInfo {...user} />
+                    <Grid container className={`${localStyle.gridContainer}`} >
+                        <PrimaryInfo {...user} />
+                        <EMailInfo {...user} />
+                    </Grid>
                 }
             </div>
-            {user &&
-                <section>
-                    {JSON.stringify(user)}
-                </section>
-            }
         </Container>
     )
 }

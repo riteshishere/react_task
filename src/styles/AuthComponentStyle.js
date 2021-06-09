@@ -2,10 +2,10 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const AuthComponentStyle = makeStyles((theme) => ({
     flexbox: {
-        marginTop: theme.spacing(8),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'center',
     },
     avatar: {
         margin: theme.spacing(1),
@@ -24,6 +24,9 @@ const AuthComponentStyle = makeStyles((theme) => ({
     },
     fullWidth: {
         width: "90%",
+    },
+    marginTop: {
+        marginTop: theme.spacing(8),
     },
 }));
 
