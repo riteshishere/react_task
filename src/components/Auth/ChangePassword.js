@@ -127,7 +127,7 @@ const ChangePassword = () => {
                         label="Old Password"
                         type="password"
                         id="oldPassword"
-                        autoComplete="new-password"
+                        autoComplete="current-password"
                         autoFocus
                         value={oldPassword}
                         onChange={(event) => setOldPassword(event.target.value)}
@@ -141,7 +141,7 @@ const ChangePassword = () => {
                         label="New Password"
                         type="password"
                         id="newPassword"
-                        autoComplete="current-password"
+                        autoComplete="new-password"
                         error={newPasswordErrorMsg.length ? true : false}
                         helperText={newPasswordErrorMsg}
                         value={newPassword}
@@ -152,11 +152,11 @@ const ChangePassword = () => {
                         margin="normal"
                         required
                         fullWidth
-                        name="confirmPpassword"
+                        name="confirmPassword"
                         label="Confirm your new password"
                         type="password"
-                        id="confirmPpassword"
-                        autoComplete="current-password"
+                        id="confirmPassword"
+                        autoComplete="new-password"
                         error={confirmPasswordErrorMsg.length ? true : false}
                         helperText={confirmPasswordErrorMsg}
                         value={confirmPassword}
